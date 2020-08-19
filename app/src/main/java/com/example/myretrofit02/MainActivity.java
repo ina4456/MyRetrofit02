@@ -8,11 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,9 +23,14 @@ public class MainActivity extends AppCompatActivity {
     ApiService apiService;
     Call<ResponseBody> comment;
 
-    String result;
+    private Retrofit mRetrofit;
+    private RetrofitAPI mRetrofitAPI;
+    //private Call<List<Movie>> mCallMovieList;
+
     TextView tv;
     Button btn;
+
+    String result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         tv=findViewById(R.id.tv);
         btn=findViewById(R.id.btn);
 
-        retrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
-        apiService = retrofit.create(ApiService.class);
+        mRetrofit = new Retrofit.Builder().baseUrl(ApiService.API_URL).build();
+        apiService = mRetrofit.create(ApiService.class);
 
         comment = apiService.getComment(1);
         comment.enqueue(new Callback<ResponseBody>() {
@@ -65,4 +73,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
+/*    private void setRetrofitInit() {
+
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Log.d("Test@@@@@@@@@22", "1");
+        mRetrofitAPI = mRetrofit.create(RetrofitAPI.class);
+        Log.d("Test@@@@@@@@@22", "2");
+    }*/
 }
