@@ -12,6 +12,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -30,9 +31,10 @@ public interface RetrofitAPI {
     //@GET("comments")
     //    Call<List<Movie>> getComment(@Query("postId") int postId); //=http://jsonplaceholder.typicode.com/comments?postId=1
 
-    @FormUrlEncoded
+   // @FormUrlEncoded
     @POST("getinfo/freq/visited")
-    Call<ResponseBody> postComment(@FieldMap HashMap<String, String> param);
+    //Call<ResponseBody> postComment(@FieldMap HashMap<String, String> param);
+    Call<auth_set> postComment(@Body sendTest body);
 
 
 }

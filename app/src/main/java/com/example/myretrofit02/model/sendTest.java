@@ -1,37 +1,30 @@
 package com.example.myretrofit02.model;
 
 public class sendTest {
-    String surrentDT, isSuccessful, moblie, data;
+    String currentDT;
+    String authCode;
+    //String moblie;
 
-    public String getSurrentDT() {
-        return surrentDT;
+    public sendTest(String currentDT, String authCode) {
+        this.currentDT = currentDT;
+        this.authCode = authCode;
+
     }
 
-    public void setSurrentDT(String surrentDT) {
-        this.surrentDT = surrentDT;
+    public String getCurrentDT() {
+        return currentDT;
     }
 
-    public String getIsSuccessful() {
-        return isSuccessful;
+    public void setCurrentDT(String currentDT) {
+        this.currentDT = currentDT;
     }
 
-    public void setIsSuccessful(String isSuccessful) {
-        this.isSuccessful = isSuccessful;
+    public String getAuthCode() {
+        return authCode;
     }
 
-    public String getMoblie() {
-        return moblie;
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
     }
 
-    public void setMoblie(String moblie) {
-        this.moblie = moblie;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
 }

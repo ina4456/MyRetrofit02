@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn;
     String result;
     String currentDate;
+    String code="";
 
     AES256Util aes256;
     private Call<auth_set> authSet;
@@ -70,12 +71,21 @@ public class MainActivity extends AppCompatActivity {
 
         okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient();
         aes256 = new AES256Util();
+
+
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss", Locale.KOREA);
+        currentDate = dateFormat.format(mDate);
+
+
         try {
-            makeAuthCode();
+            //makeAuthCode();
+            setRetrofitInit();
         } catch (NoSuchPaddingException | InvalidKeyException | NoSuchAlgorithmException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e ) {
             e.printStackTrace();
         }
-        setRetrofitInit();
+
 
         btn.setOnClickListener(new Button.OnClickListener(){
             @Override
@@ -86,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setRetrofitInit() {
+    private void setRetrofitInit() throws NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
 
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -100,35 +110,34 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mRetrofitAPI = mRetrofit.create(RetrofitAPI.class);
 
-/*        authSet = mRetrofitAPI.postComment(input);
+        code=makeAuthCode(currentDate);
+        authSet = mRetrofitAPI.postComment(new sendTest(currentDate, code));
         authSet.enqueue(new Callback<auth_set>(){
 
             @Override
             public void onResponse(Call<auth_set> call, Response<auth_set> response) {
                auth_set authItem = response.body();
-               *//*  for( auth_set item : mList){
+           /*      for( auth_set item : mList){
                     result += "아이디-" + item.getIsSuccessful() + " 이름-" + item.getMsg() + "\n";
-                }*//*
-
+                }*/
                 try {
                     result=aes256.decode(authItem.getMsg());
-
+                    Log.d("Test", currentDate + "입니당 : "+result+" : "+authItem.getCount());
+                    tv.setText(result);
                 } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException
                         e) {
                     e.printStackTrace();
                 }
 
-                Log.d("Test", currentDate + "입니당 : "+result);
-                tv.setText(result);
             }
 
             @Override
             public void onFailure(Call<auth_set> call, Throwable t) {
                 Log.d("ERROR", t.getMessage());
             }
-        });*/
+        });
 
-       comment=mRetrofitAPI.postComment(input);
+/*       comment=mRetrofitAPI.postComment(input);
        comment.enqueue(new Callback<ResponseBody>() {
            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
            @Override
@@ -149,22 +158,14 @@ public class MainActivity extends AppCompatActivity {
            public void onFailure(Call<ResponseBody> call, Throwable t) {
                Log.d("ERROR--", t.getMessage());
            }
-       });
+       });*/
 
 
     }
 
 
-    public String makeAuthCode() throws NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
-        String code="";
-
-        long now = System.currentTimeMillis();
-        Date mDate = new Date(now);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss", Locale.KOREA);
-        currentDate = dateFormat.format(mDate);
-
-        code = aes256.encode(currentDate);
-
+    public String makeAuthCode(String date) throws NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+        code = aes256.encode(date);
 
         input = new HashMap<>();
         input.put("currentDT", currentDate);
