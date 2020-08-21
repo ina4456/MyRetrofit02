@@ -1,4 +1,4 @@
-package com.example.myretrofit02;
+package com.example.myretrofit02.model;
 
 public class Movie {
     String postId, id, name, email, body;
